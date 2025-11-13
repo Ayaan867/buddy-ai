@@ -38,7 +38,7 @@ export default async function handler(req, res) {
 
     const reply =
       data.candidates?.[0]?.content?.parts?.[0]?.text ||
-      "No response from AI";
+      "MEA MAA CHY PY B LAGAY BALAI";
 
     return res.status(200).json({ reply });
   } catch (err) {
@@ -46,3 +46,4 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: "Server error" });
   }
 }
+
