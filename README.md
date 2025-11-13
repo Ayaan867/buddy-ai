@@ -1,2 +1,2 @@
 # buddy-ai
-ai vhatbot
+ai chatbot
