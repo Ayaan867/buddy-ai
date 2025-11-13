@@ -1,18 +1,32 @@
 import fetch from "node-fetch";
 
 export default async function handler(req, res) {
-  console.log("API route hit");
+  // Add CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  if (req.method !== "POST") {
+  // Handle preflight OPTIONS request
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  // Get message from either GET or POST
+  let message;
+  if (req.method === 'POST') {
+    message = req.body.message;
+  } else if (req.method === 'GET') {
+    message = req.query.message;
+  } else {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { message } = req.body;
-  console.log("Message received:", message);
+  // Check if message exists
+  if (!message) {
+    return res.status(400).json({ error: "Message is required" });
+  }
 
   try {
-    console.log("Sending request to Google API...");
-
     const response = await fetch(
       "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=" +
         process.env.GOOGLE_API_KEY,
@@ -30,7 +44,6 @@ export default async function handler(req, res) {
     );
 
     const data = await response.json();
-    console.log("Google API response:", data);
 
     if (data.error) {
       return res.status(500).json({ error: data.error.message });
@@ -42,8 +55,6 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ reply });
   } catch (err) {
-    console.error("Server error:", err);
     return res.status(500).json({ error: "Server error" });
   }
 }
-
