@@ -1,6 +1,17 @@
 {
+  "name": "buddy-ai",
+  "version": "1.0.0",
+  "description": "A Gemini Chatbot PoC",
+  "main": "api/buddy.js",
+  "scripts": {
+    "start": "echo 'Run this on Vercel'"
+  },
   "dependencies": {
-    "@google/genai": "^0.2.0",
-    "node-fetch": "^2.6.7"
+    "node-fetch": "^3.3.2" 
+    // If you are on Node 18+ on Vercel, you don't technically need this,
+    // but keep it if you did 'npm install node-fetch'.
+  },
+  "engines": {
+    "node": ">=18.0.0" // CRITICAL: Forces a modern, stable Node.js runtime
   }
 }
