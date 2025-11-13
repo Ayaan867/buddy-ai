@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Buddy AI</title>
+    <style>
+        body { font-family: Arial; padding: 40px; background: #f2f2f2; }
+        .chat { 
+            max-width: 600px; margin: auto; background: white; padding: 20px;
+            border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        #log { height: 400px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; }
+        input { width: 75%; padding: 10px; }
+        button { padding: 10px 20px; background: #0073ff; color: white; border: none; }
+        .user { font-weight: bold; }
+        .bot { color: #0073ff; font-weight: bold; }
+    </style>
+</head>
+<body>
+<div class="chat">
+    <h2>Buddy AI</h2>
+    <div id="log"></div>
+
+    <input id="msg" placeholder="Say something..." />
+    <button onclick="sendMsg()">Send</button>
+</div>
+
+<script>
+async function sendMsg() {
+    const log = document.getElementById("log");
+    const msg = document.getElementById("msg").value;
+
+    log.innerHTML += `<p><span class="user">You:</span> ${msg}</p>`;
+    document.getElementById("msg").value = "";
+
+    const response = await fetch("/api/buddy", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: msg })
+    });
+
+    const data = await response.json();
+
+    log.innerHTML += `<p><span class="bot">Buddy:</span> ${data.reply}</p>`;
+    log.scrollTop = log.scrollHeight;
+}
+</script>
+</body>
+</html>
